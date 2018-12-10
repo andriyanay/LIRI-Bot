@@ -12,12 +12,11 @@ var fs = require("fs");
 var search = process.argv[2];
 var term = process.argv.slice(3).join(" ");
 
-
 var divider = "\n----------------------"
 
-//---------------
+//-----------
 // Searches 
-//---------------
+//-----------
 if (search === "movie-this") {
     console.log("Looking for Your Movie..." + divider);
     movieThis();
@@ -35,9 +34,9 @@ if (search === "movie-this") {
     doWhat();
 }
 
-//---------------
+//------------------
 // Search movie-this
-//---------------
+//------------------
 function movieThis() {
     var movie = term
 
@@ -54,30 +53,14 @@ function movieThis() {
         .then(function(response){
             // console.log(response.data)
 
-            var movieTitle = response.data.Title;
-            console.log("Title: " + movieTitle)
-
-            var movieYear = response.data.Year;
-            console.log("Year: " + movieYear)
-
-            var movieImdb = response.data.imdbRating;
-            console.log("IMDB Rating: " + movieImdb)
-
-            var movieRating = response.data.Ratings[1].Value;
-            console.log("Rotten Tomato Rating: " + movieRating)
-
-            var movieCountry = response.data.Country;
-            console.log("Country: " + movieCountry)
-
-            var movieLanguage = response.data.Language;
-            console.log("Language: " + movieLanguage)
-
-            var moviePlot = response.data.Plot;
-            console.log("Plot: " + moviePlot)
-
-            var movieCast = response.data.Actors;
-            console.log("Cast: " + movieCast)
-
+            console.log("Title: " + response.data.Title)
+            console.log("Year: " + response.data.Year)
+            console.log("IMDB Rating: " + response.data.imdbRating)
+            console.log("Rotten Tomato Rating: " + response.data.Ratings[1].Value)
+            console.log("Country: " + response.data.Country)
+            console.log("Language: " + response.data.Language)
+            console.log("Plot: " + response.data.Plot)
+            console.log("Cast: " + response.data.Actors)
             console.log(divider)
         });
 
@@ -86,14 +69,14 @@ function movieThis() {
          });
 };
 
-//---------------
+//-------------------------
 // Search spotify-this-song
-//---------------
+//-------------------------
 function spotifyThis() {
     var song = term;
 
     // if no song was entered, the default song that will show up will be 
-    // "Sorry Not Sorry" by Demi Lovato
+    // "The Sign" by Ace of Base
     if (song === "") {
         song = "The Sign";
     }
@@ -106,17 +89,10 @@ function spotifyThis() {
             var songInfo = response.tracks.items[0];
             // console.log(songInfo)
 
-            var songName = songInfo.name
-            console.log("Song: " + songName)
-
-            var songArtist = songInfo.artists[0].name
-            console.log("Artist: " + songArtist)
-
-            var songAlbum = songInfo.album.name
-            console.log("Album: " + songAlbum)
-
-            var songLink = songInfo.external_urls.spotify
-            console.log("Link: " + songLink)
+            console.log("Song: " + songInfo.name)
+            console.log("Artist: " + songInfo.artists[0].name)
+            console.log("Album: " + songInfo.album.name)
+            console.log("Link: " + songInfo.external_urls.spotify)
 
             console.log(divider)
         })
@@ -129,9 +105,9 @@ function spotifyThis() {
          });
 };
 
-//---------------
+//--------------------
 // Search concert-this
-//---------------
+//--------------------
 function concertThis() {
     var artist = term
     var queryURL = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp"
@@ -145,26 +121,22 @@ function concertThis() {
 
              for (i = 0; i < concertInfo.length; i++) {
 
-            var concertVenue = concertInfo[i].venue.name;
-            console.log("Venue: " + concertVenue)
+             console.log("Venue: " + concertInfo[i].venue.name)
+             console.log("Location: " + concertInfo[i].venue.city)
+             console.log("Concert Date: " + moment(concertInfo[i].datetime).format("MM/DD/YYYY"))
 
-            var concertLocation = concertInfo[i].venue.city;
-            console.log("Location: " + concertLocation)
-
-            var concertDate = concertInfo[i].datetime;
-            concertDate = moment(concertDate).format("MM/DD/YYYY")
-            console.log("Concert Date: " + concertDate)
-
-            console.log(divider)
+             console.log(divider)
              }
         });
 
-        fs.appendFile("log.txt", "\n" + search + "\n" + artist + divider, function(err) {
-            if (err) throw err;
-         });
+         fs.appendFile("log.txt", "\n" + search + "\n" + artist + divider, function(err) {
+             if (err) throw err;
+          });
 };
 
+// ----------------------
 // Search do-what-it-says
+// ----------------------
 // If you replace text in random.txt, you should receive different answers for searches
 function doWhat() {
     fs.readFile("random.txt", "utf8", function(error, data){
